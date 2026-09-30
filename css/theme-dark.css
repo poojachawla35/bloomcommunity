@@ -145,7 +145,6 @@ body, .nav__pill, .footer, .rg, .login { transition: background-color 400ms var(
 [data-theme="dark"] .rg__needs li, [data-theme="dark"] .rg__field { background: #2B211D; }
 [data-theme="dark"] .rg__needs-icon, [data-theme="dark"] .rg__tool, [data-theme="dark"] .rg__otp-boxes input, [data-theme="dark"] .rg__btn--ghost { background: #1F1815; }
 [data-theme="dark"] .rg__composer { background: rgba(31, 24, 21, 0.9); border-color: rgba(201, 92, 78, 0.25); }
-[data-theme="dark"] .rg__composer::before { background: linear-gradient(180deg, rgba(31, 24, 21, 0), rgba(28, 21, 18, 0.85)); }
 [data-theme="dark"] .rg__tool { background: transparent; color: #E3B3A8; }
 [data-theme="dark"] .rg__tool:hover { background: rgba(255, 255, 255, 0.06); }
 [data-theme="dark"] .rg__pcard { background: rgba(31, 24, 21, 0.78); border-color: rgba(255, 255, 255, 0.06); }
