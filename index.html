@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>The Bloom Experience · Bloom Holding</title>
+  <meta name="description" content="Bloom Holding — properties, education, retail, hospitality, landscape and facilities management across the UAE." />
+  <meta name="theme-color" content="#F8F5EB" />
+  <script>
+    /* Apply the saved (or OS) theme before first paint to avoid a flash */
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("bloom.theme"); } catch (e) {}
+      if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://images.ctfassets.net" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/siri.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+  <link rel="stylesheet" href="css/motion.css" />
+  <link rel="stylesheet" href="css/login.css" />
+  <link rel="stylesheet" href="css/register.css" />
+  <link rel="stylesheet" href="css/gpt.css" />
+  <link rel="stylesheet" href="css/vivid.css" />
+  <link rel="stylesheet" href="css/theme-dark.css" />
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <!-- Shared SVG paint servers (AI sparkle icon gradient: terracotta → sand) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="ai-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#922A22" />
+        <stop offset="0.55" stop-color="#C0563F" />
+        <stop offset="1" stop-color="#D9A566" />
+      </linearGradient>
+      <!-- Gooey filter: blur, then a hard alpha threshold, so nearby blobs
+           melt into one liquid shape (divisions tab bar + background) -->
+      <filter id="goo" x="-20%" y="-50%" width="140%" height="200%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9" result="goo" />
+        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+      </filter>
+      <filter id="goo-lg" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="26" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 34 -14" />
+      </filter>
+    </defs>
+  </svg>
+  <div class="route-bar" aria-hidden="true"></div>
+  <a class="skip-link" href="#view">Skip to content</a>
+  <div id="site-nav"></div>
+  <main id="view" tabindex="-1"></main>
+  <div id="site-footer-root"></div>
+  <div id="overlays"></div>
+  <noscript><p style="padding:24px">The Bloom experience needs JavaScript enabled.</p></noscript>
+</body>
+</html>

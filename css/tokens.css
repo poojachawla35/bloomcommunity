@@ -1,0 +1,188 @@
+/* ==========================================================================
+   Bloom design tokens
+   The single source for every visual value. Components never hardcode.
+   Breakpoints (reference — CSS custom properties can't be used in @media):
+   --bp-sm 390px · --bp-md 768px · --bp-lg 1024px · --bp-xl 1280px · --bp-2xl 1440px
+   ========================================================================== */
+
+:root {
+  /* ---- Color: brand (bloomholding.com: terracotta #922A22 on cream #F8F5EB)
+     Terracotta scale is the brand's primary colour family. */
+  --terracotta-900: #4A1411;
+  --terracotta-800: #5C1A15;
+  --terracotta-700: #7A2019;
+  --terracotta-600: #922A22;         /* Bloom wordmark / header bar */
+  --terracotta-500: #A94442;         /* bloomholding.com secondary red */
+  --terracotta-300: #E3A79E;
+  --terracotta-100: #F4DCD6;
+  --terracotta-50:  #FAEDEA;
+  --cream: #F8F5EB;                  /* bloomholding.com page background */
+  --sand: #D9B98A;                   /* warm highlight on terracotta surfaces */
+
+  --color-primary: var(--terracotta-600);
+  --color-primary-hover: var(--terracotta-700);
+  --color-primary-soft: rgba(146, 42, 34, 0.08);
+  --color-primary-ring: rgba(146, 42, 34, 0.32);
+  --color-secondary: #1C1C19;        /* Bloom charcoal (image overlays) */
+  --color-secondary-hover: #34332E;
+  --color-accent: #B7863F;           /* brass — ratings, progress */
+
+  /* ---- Color: division wayfinding
+     Muted, earthy hues sampled from each division's photography so they sit
+     with terracotta. All pass 4.5:1 with white text and on cream. */
+  --div-properties: var(--terracotta-600);
+  --div-education: #34506B;          /* dusk blue */
+  --div-retail: #8F5A1C;             /* bronze */
+  --div-hospitality: #2F6F73;        /* marina teal */
+  --div-landscape: #5E7445;          /* sage */
+  --div-facilities: #5A4A6E;         /* aubergine */
+  --div-portal: var(--terracotta-800);
+
+  /* Page-level accent — see [data-division] below */
+  --accent: var(--color-primary);
+
+  /* ---- Color: surfaces ------------------------------------------------- */
+  --color-background: #FFFFFF;       /* clean white page; cream stays for type on terracotta */
+  --color-surface: #FFFFFF;
+  --color-surface-elevated: #FFFFFF;
+  --color-surface-sunken: #F6F1EF;
+  --color-tint: #FFF7F4;             /* barely-blush wash for alternating sections */
+
+  /* ---- Gradients: the "AI" layer — the Bloom GPT orb palette ---------- */
+  --grad-ai: linear-gradient(100deg, #F0643F 0%, #D63C6B 34%, #F2A93B 68%, #1FB5BD 100%);
+  --grad-brand: linear-gradient(120deg, #D9573F 0%, #A8322A 48%, #7A2019 100%);
+  --grad-dawn: linear-gradient(135deg, #FFE3D8 0%, #FFE9C7 45%, #D8F2F2 100%);
+  --color-surface-inverse: var(--terracotta-800);   /* dark chapters are Bloom red */
+  --color-surface-inverse-2: var(--terracotta-900);
+
+  /* ---- Color: text ----------------------------------------------------- */
+  --color-text-primary: #1C1C19;
+  --color-text-secondary: #54504A;
+  --color-text-muted: #6B665C;
+  --color-text-inverse: var(--cream);
+  --color-text-inverse-muted: #EBCFC7;
+
+  /* ---- Color: lines ---------------------------------------------------- */
+  --color-border: #EFE7E3;
+  --color-border-strong: #DDD2CC;
+  --color-border-inverse: rgba(248, 245, 235, 0.18);
+
+  /* ---- Color: status --------------------------------------------------- */
+  --color-success: #2E7D5B;
+  --color-success-soft: rgba(46, 125, 91, 0.1);
+  --color-warning: #A86B12;
+  --color-warning-soft: rgba(168, 107, 18, 0.1);
+  --color-error: #B3261E;
+  --color-error-soft: rgba(179, 38, 30, 0.08);
+  --color-info: #3B5B7A;
+
+  /* ---- Color: interactive states -------------------------------------- */
+  --state-hover: rgba(28, 28, 25, 0.05);
+  --state-pressed: rgba(28, 28, 25, 0.09);
+  --state-focus-ring: 0 0 0 3px var(--color-background), 0 0 0 5px var(--accent);
+  --scrim: rgba(20, 19, 17, 0.56);
+  --image-shade: linear-gradient(180deg, rgba(28, 28, 25, 0) 35%, rgba(28, 28, 25, 0.78) 100%);
+
+  /* ---- Typography ------------------------------------------------------ */
+  --font-display: "Bricolage Grotesque", "Instrument Sans", system-ui, sans-serif;
+  --font-heading: "Bricolage Grotesque", "Instrument Sans", system-ui, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-arabic: "IBM Plex Sans Arabic", "Instrument Sans", system-ui, sans-serif;
+
+  /* Scale: display → h1 → h2 → h3 → body-lg → body → caption → meta */
+  --text-display: clamp(3rem, 1.2rem + 6.4vw, 7.5rem);
+  --text-h1: clamp(2.5rem, 1.3rem + 4vw, 5rem);
+  --text-h2: clamp(2rem, 1.2rem + 2.4vw, 3.5rem);
+  --text-h3: clamp(1.25rem, 1.05rem + 0.7vw, 1.75rem);
+  --text-body-lg: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --text-body: 1rem;
+  --text-caption: 0.875rem;
+  --text-meta: 0.75rem;
+
+  --leading-tight: 0.94;
+  --leading-snug: 1.12;
+  --leading-body: 1.6;
+  --tracking-display: -0.035em;
+  --tracking-heading: -0.022em;
+  --tracking-meta: 0.14em;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ---- Spacing (4px base) --------------------------------------------- */
+  --space-3xs: 4px;
+  --space-2xs: 8px;
+  --space-xs: 12px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+  --space-4xl: 128px;
+  --section-y: clamp(72px, 10vw, 160px);
+  --gutter: clamp(16px, 4vw, 56px);
+  --maxw: 1360px;
+  --nav-h: 68px;
+  --nav-top: 14px;
+
+  /* ---- Radius ---------------------------------------------------------- */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --radius-xl: 36px;
+  --radius-pill: 999px;
+
+  /* ---- Borders --------------------------------------------------------- */
+  --border-hairline: 1px solid var(--color-border);
+  --border-strong: 1px solid var(--color-border-strong);
+
+  /* ---- Shadows (sparingly) -------------------------------------------- */
+  --shadow-sm: 0 1px 0 rgba(28, 28, 25, 0.04), 0 8px 20px -14px rgba(28, 28, 25, 0.28);
+  --shadow-md: 0 1px 0 rgba(28, 28, 25, 0.04), 0 22px 44px -26px rgba(28, 28, 25, 0.38);
+  --shadow-float: 0 0 0 1px rgba(28, 28, 25, 0.06), 0 16px 36px -18px rgba(28, 28, 25, 0.36);
+
+  /* ---- Motion ---------------------------------------------------------- */
+  --motion-fast: 160ms;
+  --motion-medium: 260ms;
+  --motion-slow: 520ms;
+  --motion-reveal: 900ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ---- Layers ---------------------------------------------------------- */
+  --z-nav: 50;
+  --z-drawer: 80;
+  --z-modal: 90;
+  --z-toast: 100;
+}
+
+/* Accent family. Recomputed on every element that sets a division so the
+   derived colours follow the override (custom props resolve where declared). */
+:root, [data-division] {
+  --accent-ink: color-mix(in srgb, var(--accent) 78%, black);
+  --accent-soft: color-mix(in srgb, var(--accent) 8%, var(--color-background));
+  --accent-tint: color-mix(in srgb, var(--accent) 16%, var(--color-background));
+  --accent-wash: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+[data-division="properties"]  { --accent: var(--div-properties); }
+[data-division="education"]   { --accent: var(--div-education); }
+[data-division="retail"]      { --accent: var(--div-retail); }
+[data-division="hospitality"] { --accent: var(--div-hospitality); }
+[data-division="landscape"]   { --accent: var(--div-landscape); }
+[data-division="facilities"]  { --accent: var(--div-facilities); }
+[data-division="portal"]      { --accent: var(--div-portal); }
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 1ms;
+    --motion-medium: 1ms;
+    --motion-slow: 1ms;
+    --motion-reveal: 1ms;
+  }
+}

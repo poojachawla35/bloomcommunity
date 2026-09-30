@@ -1,0 +1,152 @@
+/* ==========================================================================
+   Motion layer — entrances, hover depth, press feedback, route transitions.
+   Uses the independent `translate` / `scale` properties and clip-path so it
+   composes with component `transform` hover states instead of fighting them.
+   Everything is switched off under prefers-reduced-motion (end of file).
+   ========================================================================== */
+
+/* ---- Route transition -------------------------------------------------- */
+#view { transition: opacity var(--motion-medium) var(--ease-out), translate var(--motion-slow) var(--ease-expo), filter var(--motion-medium) var(--ease-out); }
+#view.is-leaving { opacity: 0; translate: 0 -10px; filter: blur(4px); transform: none; }
+#view.is-entering { animation: viewIn var(--motion-slow) var(--ease-expo); }
+@keyframes viewIn { from { opacity: 0; translate: 0 14px; } }
+
+.route-bar {
+  position: fixed; top: 0; inset-inline: 0; height: 3px; z-index: calc(var(--z-toast) + 1);
+  background: linear-gradient(90deg, var(--terracotta-600), var(--sand));
+  transform-origin: left; transform: scaleX(0); opacity: 0; pointer-events: none;
+}
+html[dir="rtl"] .route-bar { transform-origin: right; }
+body.is-routing .route-bar { opacity: 1; animation: routeBar 700ms var(--ease-out) forwards; }
+body:not(.is-routing) .route-bar { transition: opacity 300ms 120ms; }
+@keyframes routeBar { from { transform: scaleX(0); } to { transform: scaleX(0.85); } }
+
+/* ---- Header entrance ----------------------------------------------------- */
+.nav__bar { animation: navIn 900ms var(--ease-expo) both; }
+@keyframes navIn { from { opacity: 0; translate: 0 -24px; } }
+.nav__links .nav__link, .nav__center > *, .nav__end > * { animation: fadeUp 700ms var(--ease-expo) both; }
+.nav__center > :nth-child(1) { animation-delay: 120ms; }
+.nav__center > :nth-child(3) { animation-delay: 180ms; }
+.nav__center > :nth-child(4) { animation-delay: 220ms; }
+.nav__end > :nth-child(2) { animation-delay: 260ms; }
+.nav__end > :nth-child(3) { animation-delay: 300ms; }
+@keyframes fadeUp { from { opacity: 0; translate: 0 8px; } }
+
+/* Divisions menu: items cascade in */
+.menu.is-open .menu__item { animation: fadeUp 500ms var(--ease-expo) both; animation-delay: calc(var(--i, 0) * 40ms + 60ms); }
+
+/* ---- Word-split headings ------------------------------------------------- */
+.split .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.1em; margin-bottom: -0.1em; padding-inline-end: 0.06em; margin-inline-end: -0.06em; }
+.split .w > span { display: inline-block; translate: 0 110%; transition: translate 900ms var(--ease-expo); transition-delay: calc(var(--wi, 0) * 45ms + 60ms); }
+.split.is-in .w > span, .is-in .split .w > span { translate: 0 0; }
+
+/* ---- Eyebrow rule draws in ---------------------------------------------- */
+.reveal .eyebrow__rule, [data-reveal] .eyebrow__rule { transform: scaleX(0); transform-origin: left; transition: transform 900ms var(--ease-expo) 200ms; }
+html[dir="rtl"] .reveal .eyebrow__rule, html[dir="rtl"] [data-reveal] .eyebrow__rule { transform-origin: right; }
+.reveal.is-in .eyebrow__rule, [data-reveal].is-in .eyebrow__rule { transform: none; }
+
+/* ---- Clip wipes for hero imagery ----------------------------------------
+   Final inset is negative so floating chips / outlines outside the box stay
+   visible once the wipe completes. */
+.reveal--clip { opacity: 1; translate: none; clip-path: inset(100% -30% -30% -30%); transition: clip-path 1300ms var(--ease-expo); transition-delay: calc(var(--i, 0) * 80ms); }
+.reveal--clip.is-in { clip-path: inset(-30% -30% -30% -30%); }
+.reveal--clip img { scale: 1.18; transition: scale 1800ms var(--ease-expo); }
+.reveal--clip.is-in img { scale: 1; }
+
+/* Rail cards: image wipes up, then the text follows */
+.rail-card.reveal .rail-card__media { clip-path: inset(100% 0 0 0 round var(--radius-lg)); transition: clip-path 1100ms var(--ease-expo); transition-delay: calc(var(--i, 0) * 90ms); }
+.rail-card.reveal.is-in .rail-card__media { clip-path: inset(0 0 0 0 round var(--radius-lg)); }
+.rail-card.reveal .rail-card__media img { scale: 1.2; transition: scale 1600ms var(--ease-expo), transform 1.2s var(--ease-expo); }
+.rail-card.reveal.is-in .rail-card__media img { scale: 1; }
+
+/* Bento + gallery images settle from a zoom */
+.bento__item.reveal img { scale: 1.25; transition: scale 1600ms var(--ease-expo), transform 1.2s var(--ease-expo); }
+.bento__item.reveal.is-in img { scale: 1; }
+
+
+/* (Quick-start card motion lives with its styles in pages.css) */
+
+/* Stats: panel lifts, each stat staggers */
+.stats.reveal .stat { opacity: 0; translate: 0 16px; transition: opacity 700ms var(--ease-out), translate 900ms var(--ease-expo), background-color var(--motion-medium); transition-delay: calc(var(--i) * 110ms + 150ms), calc(var(--i) * 110ms + 150ms), 0s; }
+.stats.reveal.is-in .stat { opacity: 1; translate: 0 0; }
+
+/* Features, checklist, feature-list icons nudge on hover */
+.feature-list__icon { transition: rotate var(--motion-slow) var(--ease-spring), background-color var(--motion-fast); }
+.feature-list__item:hover .feature-list__icon { rotate: -10deg; background: rgba(248, 245, 235, 0.18); }
+.checklist li .checklist__tick { transition: scale var(--motion-slow) var(--ease-spring); }
+.checklist li.is-in .checklist__tick { animation: tickPop 600ms var(--ease-spring) both; animation-delay: calc(var(--i) * 80ms + 200ms); }
+@keyframes tickPop { from { scale: 0; } }
+
+/* ---- 3D tilt with sheen -------------------------------------------------- */
+[data-tilt] { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 600ms var(--ease-expo); transform-style: preserve-3d; }
+[data-tilt].reveal { transition: transform 600ms var(--ease-expo), opacity var(--motion-reveal) var(--ease-expo) calc(var(--i, 0) * 80ms), translate var(--motion-reveal) var(--ease-expo) calc(var(--i, 0) * 80ms); }
+[data-tilt].is-tilting { transition: transform 120ms linear; }
+[data-tilt]::before {
+  content: ""; position: absolute; inset: 0; z-index: 3; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.28), transparent 45%);
+  opacity: 0; transition: opacity var(--motion-medium);
+}
+[data-tilt].is-tilting::before { opacity: 1; }
+
+/* ---- Press ripple + primary shine ---------------------------------------- */
+.btn, .chip, .nav__register, .store-btn, .footer__social-btn, .seg__btn { position: relative; overflow: hidden; isolation: isolate; }
+.ripple { position: absolute; border-radius: 50%; background: currentColor; opacity: 0.18; scale: 0; pointer-events: none; z-index: -1; animation: ripple 650ms var(--ease-out) forwards; }
+@keyframes ripple { to { scale: 1; opacity: 0; } }
+.btn--primary::after, .nav__signin::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.32) 48%, transparent 66%);
+  translate: -120% 0; transition: translate 0s;
+}
+.btn--primary:hover::after, .nav__signin:hover::after { translate: 120% 0; transition: translate 900ms var(--ease-out); }
+.nav__signin { overflow: hidden; }
+
+/* Register orb breathes softly */
+
+/* ---- Image fade-in on load ---------------------------------------------- */
+img { transition: opacity 600ms var(--ease-out), filter 700ms var(--ease-out); }
+img.img-pending { opacity: 0; filter: blur(8px); }
+
+/* ---- Lists that redraw --------------------------------------------------- */
+.table__row { animation: fadeUp 500ms var(--ease-expo) both; animation-delay: calc(var(--i, 0) * 30ms); }
+.cmdk__item { animation: fadeUp 360ms var(--ease-expo) both; animation-delay: calc(var(--i, 0) * 22ms); }
+.listing__results.pgrid .pcard, .plist .prow { animation: fadeUp 600ms var(--ease-expo) both; animation-delay: calc(var(--i, 0) * 50ms); }
+.chip[aria-checked="true"] { animation: chipIn 420ms var(--ease-spring); }
+@keyframes chipIn { 40% { scale: 1.06; } }
+.empty__icon { animation: floatY 3s ease-in-out infinite; }
+@keyframes floatY { 50% { translate: 0 -6px; } }
+
+/* Checkbox tick draws */
+.check__box .icon path { stroke-dasharray: 24; stroke-dashoffset: 24; transition: stroke-dashoffset 350ms var(--ease-out) 60ms; }
+.check input:checked + .check__box .icon path { stroke-dashoffset: 0; }
+
+/* ---- Portal page ---------------------------------------------------------- */
+.phone { animation: phoneFloat 8s ease-in-out infinite; }
+@keyframes phoneFloat { 50% { translate: 0 -12px; rotate: -1deg; } }
+.phone-stage.reveal .notif--float { opacity: 0; scale: 0.9; transition: opacity 700ms var(--ease-out), scale 900ms var(--ease-spring); }
+.phone-stage.reveal .notif--a { transition-delay: 500ms; }
+.phone-stage.reveal .notif--b { transition-delay: 900ms; }
+.phone-stage.reveal.is-in .notif--float { opacity: 1; scale: 1; }
+.vhero__video { animation: kenburnsSlow 24s ease-in-out infinite alternate; }
+@keyframes kenburnsSlow { to { scale: 1.08; } }
+
+/* ---- Footer ---------------------------------------------------------------- */
+.footer__grid > .reveal { transition-delay: calc(var(--i, 0) * 90ms); }
+.footer__watermark .wl { translate: 0 40%; opacity: 0; transition: translate 1300ms var(--ease-expo), opacity 900ms var(--ease-out); transition-delay: calc(var(--i) * 80ms); }
+.footer__stage.is-in .wl { translate: 0 0; opacity: 1; }
+.footer__social-btn .icon { transition: rotate var(--motion-slow) var(--ease-spring); }
+.footer__social-btn:hover .icon { rotate: -12deg; }
+
+/* ---- Reduced motion -------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .nav__bar, .nav__links .nav__link, .nav__center > *, .nav__end > *, .menu.is-open .menu__item,
+  .table__row, .cmdk__item, .pcard, .prow, .chip, .empty__icon, .orb, .phone, .vhero__video,
+  #view.is-entering, .checklist__tick { animation: none !important; }
+  .split .w > span, .quickstart.reveal .qs, .stats.reveal .stat,
+  .phone-stage.reveal .notif--float, .footer__watermark .wl { translate: none; opacity: 1; scale: 1; }
+  .reveal--clip, .rail-card.reveal .rail-card__media { clip-path: none; }
+  .reveal--clip img, .rail-card.reveal .rail-card__media img, .bento__item.reveal img { scale: 1; }
+  .reveal .eyebrow__rule, [data-reveal] .eyebrow__rule { transform: none; }
+  [data-tilt] { transform: none; }
+  img.img-pending { opacity: 1; filter: none; }
+  .route-bar { display: none; }
+}

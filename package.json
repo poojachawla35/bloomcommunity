@@ -1,0 +1,15 @@
+{
+  "name": "bloom-holding-redesign",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bloom Holding website redesign — static HTML/CSS/ES-module site with a zero-dependency Node.js dev server. Deploys to Vercel as-is.",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED"
+}
