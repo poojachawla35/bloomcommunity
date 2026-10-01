@@ -63,6 +63,7 @@ export function renderFooter(mount) {
         <div class="footer__watermark" aria-hidden="true">
           <span class="wm">${[..."Bloom"].map((c, i) => `<span class="wl" data-l="${c}" style="--i:${i}">${c}</span>`).join("")}</span>
         </div>
+        <span class="footer__sparks" aria-hidden="true" data-sparks></span>
 
       </div>
 
@@ -121,6 +122,46 @@ export function renderFooter(mount) {
     if (moving) raf = requestAnimationFrame(step);
   };
   const kick = () => { if (!raf) raf = requestAnimationFrame(step); };
-  stage.addEventListener("pointermove", (e) => { px = e.clientX; py = e.clientY; wm.classList.add("is-live"); kick(); });
-  stage.addEventListener("pointerleave", () => { px = py = null; wm.classList.remove("is-live"); kick(); });
+
+  /* Sparkles: four-point stars in Bloom colours. Moving across the wordmark
+     sheds a trail of them from the pointer; when nobody is hovering, a single
+     soft star twinkles on a random letter every couple of seconds (only while
+     the footer is on screen and the tab is visible). */
+  const sparks = mount.querySelector("[data-sparks]");
+  const COLORS = ["#F0643F", "#D63C6B", "#F2A93B", "#1FB5BD", "#C4574A", "#FFD27A"];
+  const STAR = '<svg viewBox="0 0 24 24"><path d="M12 0C12.7 7 17 11.3 24 12 17 12.7 12.7 17 12 24 11.3 17 7 12.7 0 12 7 11.3 11.3 7 12 0Z"/></svg>';
+  const spark = (x, y, { size = 10 + Math.random() * 14, drift = true, twinkle = false } = {}) => {
+    if (sparks.childElementCount > 40) return;
+    const el = document.createElement("span");
+    el.className = twinkle ? "spark spark--twinkle" : "spark";
+    const a = Math.random() * Math.PI * 2, d = drift ? 24 + Math.random() * 46 : 0;
+    el.style.cssText = `left:${x}px; top:${y}px; --s:${size.toFixed(1)}px; --c:${COLORS[(Math.random() * COLORS.length) | 0]}; --dx:${(Math.cos(a) * d).toFixed(1)}px; --dy:${(Math.sin(a) * d - (drift ? 18 : 0)).toFixed(1)}px; --r:${(Math.random() * 180 - 90).toFixed(0)}deg`;
+    el.innerHTML = STAR;
+    el.addEventListener("animationend", () => el.remove(), { once: true });
+    sparks.appendChild(el);
+  };
+  let lastX = 0, lastY = 0, lastT = 0, hovering = false;
+  stage.addEventListener("pointermove", (e) => {
+    px = e.clientX; py = e.clientY; wm.classList.add("is-live"); kick();
+    const now = performance.now();
+    if (now - lastT < 45 || Math.hypot(px - lastX, py - lastY) < 14) return;
+    lastT = now; lastX = px; lastY = py;
+    const r = stage.getBoundingClientRect(), w = wm.getBoundingClientRect();
+    if (px < w.left - 30 || px > w.right + 30 || py < w.top - 30 || py > w.bottom + 30) return;
+    spark(px - r.left, py - r.top);
+    if (Math.random() < 0.45) spark(px - r.left + (Math.random() - 0.5) * 30, py - r.top + (Math.random() - 0.5) * 30, { size: 6 + Math.random() * 6 });
+  });
+  stage.addEventListener("pointerenter", () => { hovering = true; });
+  stage.addEventListener("pointerleave", () => { px = py = null; hovering = false; wm.classList.remove("is-live"); kick(); });
+
+  let onScreen = false;
+  new IntersectionObserver(([en]) => { onScreen = en.isIntersecting; }).observe(stage);
+  setInterval(() => {
+    if (!onScreen || hovering || document.hidden) return;
+    const L = letters[(Math.random() * letters.length) | 0].el.getBoundingClientRect();
+    const r = stage.getBoundingClientRect();
+    const x = L.left - r.left + L.width * (0.2 + Math.random() * 0.6);
+    const y = L.top - r.top + L.height * (0.15 + Math.random() * 0.5);
+    spark(x, y, { size: 16 + Math.random() * 14, drift: false, twinkle: true });
+  }, 1800);
 }
